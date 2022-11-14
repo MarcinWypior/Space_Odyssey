@@ -11,7 +11,7 @@ var keys=[];
     var ypos =innerHeight/2;
     var angle =0;
     
-setInterval(draw,10);
+setInterval(draw,7);
 //window.addEventListener('keydown',shipMovement,false);
 //window.addEventListener('keyup',stopShipMovement,false);
 window.addEventListener('keydown', function (e) {
@@ -23,6 +23,7 @@ window.addEventListener('keydown', function (e) {
 
 var dx=0;
 var dy=0;
+var velocity=0;
 var dangle=0;
 
 
@@ -31,20 +32,21 @@ function draw(){
     dx=0;
     dy=0;
     dangle=0;
-    
+    velocity=0;
     
   if (keys && keys[37]) {
       //dx= -1
-      dangle = -0.2; }
+      dangle = -0.4; }
   if (keys && keys[39]) {
       //dx=1;
-      dangle = 0.2;  
+      dangle = 0.4;  
   }
-  if (keys && keys[38]) {dy = -1; }
-  if (keys && keys[40]) {dy = 1; }
+  if (keys && keys[38]) {velocity = -2; }
+  if (keys && keys[40]) {velocity = 2; }
     
-    xpos=xpos+dx;
-    ypos=ypos+dy;
+    xpos=xpos-velocity*Math.sin(angle*Math.PI / 180);
+    ypos=ypos+velocity*Math.cos(angle*Math.PI / 180);
+    
     angle=angle+dangle;
  
     //ctx.save();
@@ -67,7 +69,6 @@ function drawImageRot(img,x,y,width,height,deg){
 
     //Convert degrees to radian 
     var rad = deg * Math.PI / 180;
-    console.log("kąt" + angle);
 
     //Set the origin to the center of the image
     ctx.translate(x + width / 2, y + height / 2);
