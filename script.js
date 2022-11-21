@@ -10,7 +10,10 @@ var keys=[];
     var xpos =innerWidth/2;
     var ypos =innerHeight/2;
     var angle =0;
+
+    obstacle= new Obstacle(100,100,40,40);
     
+
 setInterval(draw,7);
 //window.addEventListener('keydown',shipMovement,false);
 //window.addEventListener('keyup',stopShipMovement,false);
@@ -63,7 +66,7 @@ function draw(){
     
     ctx.fillText("x :"+Math.round(xpos)+" "+ " y: "+Math.round(ypos), 100, innerHeight-50);
     ctx.fillText("collistion "+Math.round(Collision(100,100,40,40)), 100, innerHeight-100);
-    ctx.fillText("distance "+Math.round(Distance(xpos,ypos,40,40,100,100,40,40)), 100, innerHeight-150);
+    ctx.fillText("distance "+Math.round(Distance(xpos,ypos,40,40,obstacle)), 100, innerHeight-150);
     
    drawImageRot(Star,100,100,40,40,starAngle);
     starAngle = starAngle +0.4;
@@ -99,9 +102,9 @@ function Obstacle(px,py,pwidth,pheight){
 
 
 
-function MyShip(px,py,pwidth,pheight,pangle)
+function Ship(px,py,pwidth,pheight,pangle)
 {
-this.x=px;
+ this.x=px;
  this.y=py;
  this.width=pwidth;
  this.height=pheight;
@@ -115,10 +118,10 @@ function Collision(x,y,width,height)
                       (y+height/2-(ypos+20))*(y+height/2-(ypos+20)));
 }
 
-function Distance(x1,y1,width1,height1,x2,y2,width2,height2){
+function Distance(a,b){
     
-    return Math.sqrt(((x1-width1/2)-(x2-width2/2))*((x1-width1/2)-(x2-width2/2))
-                    +((y1-height1/2)-(y2-height2/2))*((y1-height2/2)-(y2-height2/2)));
+    return Math.sqrt(((b.x-b.width/2)-(a.x-a.width/2))*((b.x-b.width/2)-(a.x-a.width/2))
+                    +((b.y-b.height/2)-(a.y-a.height/2))*((b.y-b.height/2)-(a.y-a.height/2)));
 }
 
 
