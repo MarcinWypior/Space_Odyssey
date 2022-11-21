@@ -7,8 +7,12 @@ var keys=[];
     Starship.src = "starship.png";
     var Star= new Image();
     Star.src = "Star.png";
+    
+    myShip= new Ship(innerWidth/2,innerHeight/2,40,60,0);
+
     var xpos =innerWidth/2;
     var ypos =innerHeight/2;
+
     var angle =0;
 
     obstacle= new Obstacle(100,100,40,40);
@@ -45,13 +49,13 @@ function draw(){
       //dx=1;
       dangle = 0.7;  
   }
-  if (keys && keys[38]) {velocity = -2; }
-  if (keys && keys[40]) {velocity = 2; }
+  if (keys && keys[38]) {velocity = -1.4; }
+  if (keys && keys[40]) {velocity = 1.4; }
     
-    xpos=xpos-velocity*Math.sin(angle*Math.PI / 180);
-    ypos=ypos+velocity*Math.cos(angle*Math.PI / 180);
+    myShip.x=myShip.x-velocity*Math.sin(myShip.angle*Math.PI / 180);
+    myShip.y=myShip.y+velocity*Math.cos(myShip.angle*Math.PI / 180);
     
-    angle=angle+dangle;
+    myShip.angle=myShip.angle+dangle;
  
     ctx.clearRect(0,0,game.width,game.height);
     ctx.font = "30px Comic Sans MS";
@@ -59,16 +63,19 @@ function draw(){
     ctx.textAlign = "center";
         
     
-    drawImageRot(Starship,xpos,ypos,40,60,angle);
+    drawImageRot(Starship,myShip.x,myShip.y,myShip.width,myShip.height,myShip.angle);
     if((Collision(100,100,40,40)<10)){
         ctx.fillText("Kolizja", innerWidth/2, innerHeight/2);
     }
     
-    ctx.fillText("x :"+Math.round(xpos)+" "+ " y: "+Math.round(ypos), 100, innerHeight-50);
+    ctx.fillText("x :"+Math.round(myShip.x)+" "+ " y: "+Math.round(myShip.y), 100, innerHeight-50);
     ctx.fillText("collistion "+Math.round(Collision(100,100,40,40)), 100, innerHeight-100);
-    ctx.fillText("distance "+Math.round(Distance(xpos,ypos,40,40,obstacle)), 100, innerHeight-150);
+    ctx.fillText("distance "+Math.round(Distance(myShip,obstacle)), 100, innerHeight-150);
+    ctx.fillText("x difference "+ Math.round((myShip.x+myShip.width/2- obstacle.x-obstacle.width/2)), 150, 20);
+    ctx.fillText("y difference "+ Math.round(myShip.y+myShip.height/2- obstacle.y-obstacle.height/2), 150, 80);
+
     
-   drawImageRot(Star,100,100,40,40,starAngle);
+   drawImageRot(Star,obstacle.x,obstacle.y,obstacle.width,obstacle.height,starAngle);
     starAngle = starAngle +0.4;
     if(starAngle >360)
         starAngle=0;
@@ -77,20 +84,12 @@ function draw(){
 }
 
 function drawImageRot(img,x,y,width,height,deg){
-    // Store the current context state (i.e. rotation, translation etc..)
-    //ctx.save();
-    //Convert degrees to radian 
     var rad = deg * Math.PI / 180;
-    //Set the origin to the center of the image
     ctx.translate(x + width / 2, y + height / 2);
-    //Rotate the canvas around the origin
-    ctx.rotate(rad);
-    //draw the image    
+    ctx.rotate(rad);  
     ctx.drawImage(img,width / 2 * (-1),height / 2 * (-1),width,height);
-      ctx.rotate(-rad);
+    ctx.rotate(-rad);
     ctx.translate((x + width / 2)*(-1), (y + height / 2)*(-1));
-    // Restore canvas state as saved from above
-    //ctx.restore();
 }
 
 function Obstacle(px,py,pwidth,pheight){
@@ -112,16 +111,16 @@ function Ship(px,py,pwidth,pheight,pangle)
 }
 
 function Collision(x,y,width,height)
-{ 
+{
    
-    return Math.sqrt(x+width/2-(xpos-20)*(x+width/2-(xpos-20))+
+    return Math.sqrt((x+width/2-(xpos-20))*(x+width/2-(xpos-20))+
                       (y+height/2-(ypos+20))*(y+height/2-(ypos+20)));
 }
 
-function Distance(a,b){
-    
-    return Math.sqrt(((b.x-b.width/2)-(a.x-a.width/2))*((b.x-b.width/2)-(a.x-a.width/2))
-                    +((b.y-b.height/2)-(a.y-a.height/2))*((b.y-b.height/2)-(a.y-a.height/2)));
+function Distance(a,b)
+{    
+    return Math.sqrt(((b.x+b.width/2)-(a.x+a.width/2))*((b.x+b.width/2)-(a.x+a.width/2))
+                    +((b.y+b.height/2)-(a.y+a.height/2))*((b.y+b.height/2)-(a.y+a.height/2)));
 }
 
 
