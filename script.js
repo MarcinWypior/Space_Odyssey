@@ -21,7 +21,7 @@ window.addEventListener('keydown', function (e) {
            keys[e.keyCode] = false;
         })
 
-var dx=0;
+var dx=0;  //test
 var dy=0;
 var velocity=0;
 var dangle=0;
