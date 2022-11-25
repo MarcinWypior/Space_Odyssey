@@ -7,6 +7,8 @@ var keys=[];
     Starship.src = "starship.png";
     var Star= new Image();
     Star.src = "Star.png";
+    var exhaust= new Image();
+    exhaust.src="exhaust.png";
     
     myShip= new Ship(innerWidth/2,innerHeight/2,40,60,0);
 
@@ -68,10 +70,11 @@ function draw(){
         ctx.fillText("Kolizja", innerWidth/2, innerHeight/2);
     }
     
-    ctx.fillText("x :"+Math.round(myShip.x)+" "+ " y: "+Math.round(myShip.y), 100, innerHeight-50);
-    ctx.fillText("collistion "+Math.round(Collision(100,100,40,40)), 100, innerHeight-100);
+    
+    ctx.fillText("x :"+Math.round(myShip.x)+" "+ " y: "+Math.round(myShip.y), 100, innerHeight-50); //położenie statku
+    ctx.fillText("collistion "+Math.round(Collision(100,100,40,40)), 100, innerHeight-100);//
     ctx.fillText("distance "+Math.round(Distance(myShip,obstacle)), 100, innerHeight-150);
-    ctx.fillText("x difference "+ Math.round((myShip.x+myShip.width/2- obstacle.x-obstacle.width/2)), 150, 20);
+    ctx.fillText("x difference "+ Math.round((myShip.x+myShip.width/2- obstacle.x-obstacle.width/2)), 150, 30);
     ctx.fillText("y difference "+ Math.round(myShip.y+myShip.height/2- obstacle.y-obstacle.height/2), 150, 80);
 
     
@@ -79,7 +82,8 @@ function draw(){
     starAngle = starAngle +0.4;
     if(starAngle >360)
         starAngle=0;
-    //ctx.drawImage(Star,100,100,40,40);
+    
+    drawImageRot(exhaust,myShip.x+(myShip.width+4)*Math.sin(-myShip.angle*Math.PI / 180),myShip.y+(myShip.width+4)*Math.cos(myShip.angle*Math.PI / 180),40,60,myShip.angle+90);
     
 }
 
