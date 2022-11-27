@@ -9,15 +9,19 @@ var keys=[];
     Star.src = "Star.png";
     var exhaust= new Image();
     exhaust.src="exhaust.png";
+//    var collision= new Image();
+//    collision.src="e1.png";
     
     myShip= new Ship(innerWidth/2,innerHeight/2,40,60,0);
-
+    collision = new Collision(0,0,40,40,0);
+    collision.image=new Image();
+    collision.image.src="e1.png";
     var xpos =innerWidth/2;
     var ypos =innerHeight/2;
 
     var angle =0;
-
-    obstacle= new Obstacle(100,100,40,40);
+    
+    var obstacle= new Obstacle(100,100,40,40);
     
 
 setInterval(draw,7);
@@ -65,25 +69,32 @@ function draw(){
     ctx.textAlign = "center";
         
     
-    drawImageRot(Starship,myShip.x,myShip.y,myShip.width,myShip.height,myShip.angle);
-    if((Collision(100,100,40,40)<10)){
-        ctx.fillText("Kolizja", innerWidth/2, innerHeight/2);
+    
+    if(!(Distance(myShip,obstacle)<25)){        
+        drawImageRot(Starship,myShip.x,myShip.y,myShip.width,myShip.height,myShip.angle);
+        drawImageRot(exhaust,myShip.x+(myShip.width+4)*Math.sin(-myShip.angle*Math.PI / 180),myShip.y+(myShip.width+4)*Math.cos(myShip.angle*Math.PI / 180),40,60,myShip.angle+90);
+    }else{
+        collision.x=myShip.x;
+        collision.y=myShip.y;
+        collision.width=myShip.width;
+        collision.height=myShip.height;
+        collision.angle=myShip.angle;
+        
+        
+            ctx.fillText("Kolizja", innerWidth/2, innerHeight/2);
+//     drawImageRot(collision.image,collision.x,collision.y,collision.width,collision.height,collision.angle);
+        drawImageRot(collision.image,myShip.x,myShip.y,myShip.width,myShip.height,myShip.angle);
+        collision.nextState();
     }
     
     
     ctx.fillText("x :"+Math.round(myShip.x)+" "+ " y: "+Math.round(myShip.y), 100, innerHeight-50); //położenie statku
-    ctx.fillText("collistion "+Math.round(Collision(100,100,40,40)), 100, innerHeight-100);//
-    ctx.fillText("distance "+Math.round(Distance(myShip,obstacle)), 100, innerHeight-150);
-    ctx.fillText("x difference "+ Math.round((myShip.x+myShip.width/2- obstacle.x-obstacle.width/2)), 150, 30);
-    ctx.fillText("y difference "+ Math.round(myShip.y+myShip.height/2- obstacle.y-obstacle.height/2), 150, 80);
-
+    ctx.fillText("distance "+Math.round(Distance(myShip,obstacle)), 100, innerHeight-100); // test funkcji Distance
     
    drawImageRot(Star,obstacle.x,obstacle.y,obstacle.width,obstacle.height,starAngle);
     starAngle = starAngle +0.4;
     if(starAngle >360)
         starAngle=0;
-    
-    drawImageRot(exhaust,myShip.x+(myShip.width+4)*Math.sin(-myShip.angle*Math.PI / 180),myShip.y+(myShip.width+4)*Math.cos(myShip.angle*Math.PI / 180),40,60,myShip.angle+90);
     
 }
 
@@ -114,11 +125,49 @@ function Ship(px,py,pwidth,pheight,pangle)
  this.angle=pangle;
 }
 
-function Collision(x,y,width,height)
+function Collision(px,py,pwidth,pheight,pangle)
 {
-   
-    return Math.sqrt((x+width/2-(xpos-20))*(x+width/2-(xpos-20))+
-                      (y+height/2-(ypos+20))*(y+height/2-(ypos+20)));
+ this.x=px;
+ this.y=py;
+ this.width=pwidth;
+ this.height=pheight;
+ this.angle=pangle;
+ this.state=1;
+ this.image=new Image();
+ this.image.src="e1.png";
+    
+    
+    nextState: function nextState() {
+    if(this.state<7)   
+        {
+        this.state=this.state+1;
+        if(this.state===1){
+            this.image.src="e1.png";
+            }
+            else if (this.state===2) {
+            this.image.src="e2.png";
+            }
+            else if (this.state===3) {
+            this.image.src="e3.png";
+            }
+            else if (this.state===4) {
+            this.image.src="e4.png";
+            }
+            else if (this.state===5) {
+            this.image.src="e5.png";
+            }
+            else if (this.state===6) {
+            this.image.src="e6.png";
+            }
+            
+        return this.state + 1;
+        }
+        else 
+        {
+            return;
+        }
+    }
+
 }
 
 function Distance(a,b)
@@ -126,5 +175,7 @@ function Distance(a,b)
     return Math.sqrt(((b.x+b.width/2)-(a.x+a.width/2))*((b.x+b.width/2)-(a.x+a.width/2))
                     +((b.y+b.height/2)-(a.y+a.height/2))*((b.y+b.height/2)-(a.y+a.height/2)));
 }
+
+
 
 
