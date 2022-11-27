@@ -70,9 +70,15 @@ function draw(){
         
     
     
+   drawImageRot(Star,obstacle.x,obstacle.y,obstacle.width,obstacle.height,starAngle);
+    starAngle = starAngle +0.4;
+    if(starAngle >360)
+        starAngle=0;
+    
     if(!(Distance(myShip,obstacle)<25)){        
         drawImageRot(Starship,myShip.x,myShip.y,myShip.width,myShip.height,myShip.angle);
         drawImageRot(exhaust,myShip.x+(myShip.width+4)*Math.sin(-myShip.angle*Math.PI / 180),myShip.y+(myShip.width+4)*Math.cos(myShip.angle*Math.PI / 180),40,60,myShip.angle+90);
+        collision.state=1;
     }else{
         collision.x=myShip.x;
         collision.y=myShip.y;
@@ -80,21 +86,18 @@ function draw(){
         collision.height=myShip.height;
         collision.angle=myShip.angle;
         
-        
+        if(collision.state<95){
             ctx.fillText("Kolizja", innerWidth/2, innerHeight/2);
 //     drawImageRot(collision.image,collision.x,collision.y,collision.width,collision.height,collision.angle);
-        drawImageRot(collision.image,myShip.x,myShip.y,myShip.width,myShip.height,myShip.angle);
+        drawImageRot(collision.image,collision.x-collision.width/2,collision.y-collision.height/2,collision.width*2,collision.height*2,collision.angle);
         collision.nextState();
+        }
     }
     
     
     ctx.fillText("x :"+Math.round(myShip.x)+" "+ " y: "+Math.round(myShip.y), 100, innerHeight-50); //położenie statku
     ctx.fillText("distance "+Math.round(Distance(myShip,obstacle)), 100, innerHeight-100); // test funkcji Distance
     
-   drawImageRot(Star,obstacle.x,obstacle.y,obstacle.width,obstacle.height,starAngle);
-    starAngle = starAngle +0.4;
-    if(starAngle >360)
-        starAngle=0;
     
 }
 
@@ -135,28 +138,28 @@ function Collision(px,py,pwidth,pheight,pangle)
  this.state=1;
  this.image=new Image();
  this.image.src="e1.png";
-    
-    
-    nextState: function nextState() {
-    if(this.state<7)   
+}
+
+Collision.prototype.nextState = function() {
+    if(this.state<100)   
         {
         this.state=this.state+1;
         if(this.state===1){
             this.image.src="e1.png";
             }
-            else if (this.state===2) {
+            else if (this.state<20) {
             this.image.src="e2.png";
             }
-            else if (this.state===3) {
+            else if (this.state<40) {
             this.image.src="e3.png";
             }
-            else if (this.state===4) {
+            else if (this.state<65) {
             this.image.src="e4.png";
             }
-            else if (this.state===5) {
+            else if (this.state<80) {
             this.image.src="e5.png";
             }
-            else if (this.state===6) {
+            else if (this.state<90) {
             this.image.src="e6.png";
             }
             
@@ -164,11 +167,9 @@ function Collision(px,py,pwidth,pheight,pangle)
         }
         else 
         {
-            return;
+            return this;
         }
-    }
-
-}
+};
 
 function Distance(a,b)
 {    
