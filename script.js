@@ -37,6 +37,7 @@ window.addEventListener('keydown', function (e) {
 var dx=0;  //test
 var dy=0;
 var velocity=0;
+var acceleration=0;
 var dangle=0;
 
 var starAngle=0;
@@ -46,7 +47,7 @@ function draw(){
     dx=0;
     dy=0;
     dangle=0;
-    velocity=0;
+    acceleration=0;
     
   if (keys && keys[37]) {
       //dx= -1
@@ -55,11 +56,20 @@ function draw(){
       //dx=1;
       dangle = 0.7;  
   }
-  if (keys && keys[38]) {velocity = -1.4; }
-  if (keys && keys[40]) {velocity = 1.4; }
+  if (keys && keys[38]) {acceleration = 0.2; }
+  if (keys && keys[40]) {acceleration = -0.1; }
     
-    myShip.x=myShip.x-velocity*Math.sin(myShip.angle*Math.PI / 180);
-    myShip.y=myShip.y+velocity*Math.cos(myShip.angle*Math.PI / 180);
+    if(velocity>5)
+        velocity=5;
+    
+     if(velocity<0)
+        velocity=0;
+ 
+    
+    
+    velocity=velocity+acceleration;
+    myShip.x=myShip.x+velocity*Math.sin(myShip.angle*Math.PI / 180);
+    myShip.y=myShip.y-velocity*Math.cos(myShip.angle*Math.PI / 180);
     
     myShip.angle=myShip.angle+dangle;
  
@@ -83,7 +93,9 @@ function draw(){
         collision.height=myShip.height;
         collision.angle=myShip.angle;
     }
-        
+    
+    var exhaustLengt=60;
+    
     if(!myShip.destroyed){
         drawImageRot(Starship,myShip.x,myShip.y,myShip.width,myShip.height,myShip.angle);
         drawImageRot(exhaust,myShip.x+(myShip.width+4)*Math.sin(-myShip.angle*Math.PI / 180),myShip.y+(myShip.width+4)*Math.cos(myShip.angle*Math.PI / 180),40,60,myShip.angle+90);
@@ -103,6 +115,8 @@ function draw(){
     //położenie statku
     ctx.fillText("distance "+Math.round(Distance(myShip,obstacle)), 100, innerHeight-100); 
     // test funkcji Distance
+     ctx.fillText("velocity "+Math.round(velocity), 100, innerHeight-140); 
+    // velocity
     
     
 }
