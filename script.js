@@ -75,28 +75,34 @@ function draw(){
     if(starAngle >360)
         starAngle=0;
     
-    if(!(Distance(myShip,obstacle)<25)){        
-        drawImageRot(Starship,myShip.x,myShip.y,myShip.width,myShip.height,myShip.angle);
-        drawImageRot(exhaust,myShip.x+(myShip.width+4)*Math.sin(-myShip.angle*Math.PI / 180),myShip.y+(myShip.width+4)*Math.cos(myShip.angle*Math.PI / 180),40,60,myShip.angle+90);
-        collision.state=1;
-    }else{
+    if(!(Distance(myShip,obstacle)>25)){
+        myShip.destroyed=true;
         collision.x=myShip.x;
         collision.y=myShip.y;
         collision.width=myShip.width;
         collision.height=myShip.height;
         collision.angle=myShip.angle;
+    }
         
+    if(!myShip.destroyed){
+        drawImageRot(Starship,myShip.x,myShip.y,myShip.width,myShip.height,myShip.angle);
+        drawImageRot(exhaust,myShip.x+(myShip.width+4)*Math.sin(-myShip.angle*Math.PI / 180),myShip.y+(myShip.width+4)*Math.cos(myShip.angle*Math.PI / 180),40,60,myShip.angle+90);
+        collision.state=1;
+    }else{
         if(collision.state<95){
             ctx.fillText("Kolizja", innerWidth/2, innerHeight/2);
 //     drawImageRot(collision.image,collision.x,collision.y,collision.width,collision.height,collision.angle);
-        drawImageRot(collision.image,collision.x-collision.width/2,collision.y-collision.height/2,collision.width*2,collision.height*2,collision.angle);
-        collision.nextState();
+            drawImageRot(collision.image,collision.x-collision.width/2,collision.y-                                     collision.height/2,collision.width*2,collision.height*2,collision.angle);
+            
+            collision.nextState();
         }
     }
-    
-    
-    ctx.fillText("x :"+Math.round(myShip.x)+" "+ " y: "+Math.round(myShip.y), 100, innerHeight-50); //położenie statku
-    ctx.fillText("distance "+Math.round(Distance(myShip,obstacle)), 100, innerHeight-100); // test funkcji Distance
+        
+
+    ctx.fillText("x :"+Math.round(myShip.x)+" "+ " y: "+Math.round(myShip.y), 100, innerHeight-50); 
+    //położenie statku
+    ctx.fillText("distance "+Math.round(Distance(myShip,obstacle)), 100, innerHeight-100); 
+    // test funkcji Distance
     
     
 }
@@ -126,6 +132,7 @@ function Ship(px,py,pwidth,pheight,pangle)
  this.width=pwidth;
  this.height=pheight;
  this.angle=pangle;
+ this.destroyed=false;
 }
 
 function Collision(px,py,pwidth,pheight,pangle)
