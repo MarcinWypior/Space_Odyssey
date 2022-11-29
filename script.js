@@ -16,6 +16,7 @@ var keys=[];
     collision = new Collision(0,0,40,40,0);
     collision.image=new Image();
     collision.image.src="e1.png";
+    var counter=0;
     var xpos =innerWidth/2;
     var ypos =innerHeight/2;
 
@@ -49,6 +50,19 @@ function draw(){
     dangle=0;
     acceleration=0;
     
+    if(myShip.centerX()>innerWidth)
+        myShip.setCenterX(0);
+    
+    if(myShip.centerX()<0)
+        myShip.setCenterX(innerWidth);
+    
+    if(myShip.centerY()>innerHeight)
+        myShip.setCenterY(0);
+    
+    if(myShip.centerY()<0)
+        myShip.setCenterY(innerHeight);
+    
+    
   if (keys && keys[37]) {
       //dx= -1
       dangle = -0.7; }
@@ -56,8 +70,8 @@ function draw(){
       //dx=1;
       dangle = 0.7;  
   }
-  if (keys && keys[38]) {acceleration = 0.2; }
-  if (keys && keys[40]) {acceleration = -0.1; }
+  if (keys && keys[38]) {acceleration = 0.04; }
+  if (keys && keys[40]) {acceleration = -0.02; }
     
     if(velocity>5)
         velocity=5;
@@ -78,10 +92,19 @@ function draw(){
     ctx.fillStyle = "red";
     ctx.textAlign = "center";
         
+    //TO DO:: dopisz metodę do Ship center  zwracającą prawdziwy środek staktu
+      
+      ctx.fillText("położenie środka x "+Math.round(myShip.x), 100, innerHeight-250); 
+    //położenie statku x 
     
+      ctx.fillText("położenie środka y "+Math.round(myShip.y), 100, innerHeight-200); 
+    //położenie statku y
     
    drawImageRot(Star,obstacle.x,obstacle.y,obstacle.width,obstacle.height,starAngle);
-    starAngle = starAngle +0.4;
+    
+    starAngle = starAngle +0.4;  // Do przeniesienia
+    
+    
     if(starAngle >360)
         starAngle=0;
     
@@ -94,11 +117,20 @@ function draw(){
         collision.angle=myShip.angle;
     }
     
-    var exhaustLengt=60;
+    
     
     if(!myShip.destroyed){
         drawImageRot(Starship,myShip.x,myShip.y,myShip.width,myShip.height,myShip.angle);
-        drawImageRot(exhaust,myShip.x+(myShip.width+4)*Math.sin(-myShip.angle*Math.PI / 180),myShip.y+(myShip.width+4)*Math.cos(myShip.angle*Math.PI / 180),40,60,myShip.angle+90);
+        
+        var frequency=velocity/5;
+        counter += 0.1;
+        if(counter>5)
+        counter=0;
+        
+        if(counter>5-frequency*5)
+         drawImageRot(exhaust,myShip.x+(myShip.width+4)*Math.sin(-myShip.angle*Math.PI / 180),myShip.y+(myShip.width+4)*Math.cos(myShip.angle*Math.PI / 180),40,60,myShip.angle+90);
+        
+        
         collision.state=1;
     }else{
         if(collision.state<95){
@@ -149,6 +181,22 @@ function Ship(px,py,pwidth,pheight,pangle)
  this.destroyed=false;
 }
 
+Ship.prototype.centerX = function(){
+ return (this.x+this.width/2);   
+}
+
+Ship.prototype.centerY = function(){
+ return (this.y+this.height/2);   
+}
+
+Ship.prototype.setCenterX = function(newPos){
+ this.x=newPos-this.width/2;   
+}
+
+Ship.prototype.setCenterY = function(newPos){
+ this.y=newPos-this.height/2; 
+}
+
 function Collision(px,py,pwidth,pheight,pangle)
 {
  this.x=px;
@@ -191,6 +239,8 @@ Collision.prototype.nextState = function() {
             return this;
         }
 };
+
+
 
 function Distance(a,b)
 {    
