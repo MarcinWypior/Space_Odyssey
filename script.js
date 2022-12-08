@@ -9,8 +9,11 @@ var keys=[];
     Star.src = "Star.png";
     var exhaust= new Image();
     exhaust.src="exhaust.png";
-//    var collision= new Image();
-//    collision.src="e1.png";
+    
+
+
+var stars = [];
+var newStarCounter=0;
     
     myShip= new Ship(innerWidth/2,innerHeight/2,40,60,0);
     collision = new Collision(0,0,40,40,0);
@@ -19,15 +22,10 @@ var keys=[];
     var counter=0;
     var xpos =innerWidth/2;
     var ypos =innerHeight/2;
-
-    var angle =0;
-    
-    var obstacle= new Obstacle(100,100,40,40);
-    
+    var angle =0;    
 
 setInterval(draw,7);
-//window.addEventListener('keydown',shipMovement,false);
-//window.addEventListener('keyup',stopShipMovement,false);
+
 window.addEventListener('keydown', function (e) {
             keys[e.keyCode] = true;
         })
@@ -94,33 +92,52 @@ function draw(){
         
     //TO DO:: dopisz metodę do Ship center  zwracającą prawdziwy środek staktu
       
-      ctx.fillText("położenie środka x "+Math.round(myShip.x), 100, innerHeight-250); 
+      ctx.fillText("położenie środka x "+Math.round(myShip.x), 100, innerHeight-150); 
     //położenie statku x 
-    
-      ctx.fillText("położenie środka y "+Math.round(myShip.y), 100, innerHeight-200); 
+      ctx.fillText("położenie środka y "+Math.round(myShip.y), 100, innerHeight-100); 
     //położenie statku y
     
-   drawImageRot(Star,obstacle.x,obstacle.y,obstacle.width,obstacle.height,starAngle);
+
+    //tworzenie nowej gwiazdki  !!!
     
-    starAngle = starAngle +0.4;  // Do przeniesienia
+   CreateNewStar();
+   
+    for(let i=0;i<stars.length-1;i++){
+        if(stars[i]!=null)
+        {
+        stars[i].move();
+        drawImageRot(Star,stars[i].x,stars[i].y,stars[i].width,stars[i].height,stars[i].angle);  
+                
+            if(!(Distance(myShip,stars[i])>25)){
+                    myShip.destroyed=true;
+                    collision.x=myShip.x;
+                    collision.y=myShip.y;
+                    collision.width=myShip.width;
+                    collision.height=myShip.height;
+                    collision.angle=myShip.angle;
+            }
+          
+            if((stars[i].centerX>innerWidth)||(stars[i].centerX<0)||(stars[i].centerY<0)||(stars[i].centerY>innerHeight)){
+                            console.log("gwiazda znika");
+                            stars[i]=null;
+                            //console.log(stars);
+                        }
+        }
+    }
     
+  
+const results = stars.filter(element => {
+  return element !== null;
+});
+console.log(toString(results)+" "+stars.length);
+stars=results;    
+
+
     
     if(starAngle >360)
         starAngle=0;
-    
-    if(!(Distance(myShip,obstacle)>25)){
-        myShip.destroyed=true;
-        collision.x=myShip.x;
-        collision.y=myShip.y;
-        collision.width=myShip.width;
-        collision.height=myShip.height;
-        collision.angle=myShip.angle;
-    }
-    
-    
-    
-    if(!myShip.destroyed){
-        drawImageRot(Starship,myShip.x,myShip.y,myShip.width,myShip.height,myShip.angle);
+        
+    if(!myShip.destroyed){    drawImageRot(Starship,myShip.x,myShip.y,myShip.width,myShip.height,myShip.angle);
         
         var frequency=velocity/5;
         counter += 0.1;
@@ -135,9 +152,9 @@ function draw(){
     }else{
         if(collision.state<95){
             ctx.fillText("Kolizja", innerWidth/2, innerHeight/2);
-//     drawImageRot(collision.image,collision.x,collision.y,collision.width,collision.height,collision.angle);
+
             drawImageRot(collision.image,collision.x-collision.width/2,collision.y-                                     collision.height/2,collision.width*2,collision.height*2,collision.angle);
-            
+
             collision.nextState();
         }
     }
@@ -167,8 +184,25 @@ function Obstacle(px,py,pwidth,pheight){
  this.y=py;
  this.width=pwidth;
  this.height=pheight;
+ this.angle=0;
+ this.rotation=0;
+ this.velocityX=0;
+ this.velocityY=0;
 }
 
+Obstacle.prototype.centerX = function(){
+ return (this.x+this.width/2);   
+}
+
+Obstacle.prototype.centerY = function(){
+ return (this.y+this.height/2);   
+}
+
+Obstacle.prototype.move = function(){
+ this.x=this.x+this.velocityX;   
+ this.y=this.y+this.velocityY;
+ this.angle=this.angle+this.rotation;
+}
 
 
 function Ship(px,py,pwidth,pheight,pangle)
@@ -212,7 +246,7 @@ function Collision(px,py,pwidth,pheight,pangle)
 Collision.prototype.nextState = function() {
     if(this.state<100)   
         {
-        this.state=this.state+1;
+        this.state=this.state+1.5;
         if(this.state===1){
             this.image.src="e1.png";
             }
@@ -240,13 +274,24 @@ Collision.prototype.nextState = function() {
         }
 };
 
-
-
 function Distance(a,b)
 {    
     return Math.sqrt(((b.x+b.width/2)-(a.x+a.width/2))*((b.x+b.width/2)-(a.x+a.width/2))
                     +((b.y+b.height/2)-(a.y+a.height/2))*((b.y+b.height/2)-(a.y+a.height/2)));
 }
+
+
+function CreateNewStar(){
+     newStarCounter+=0.1
+    if(newStarCounter>=30){
+    stars.push(new Obstacle(100,200,40,40));
+        stars[stars.length-1].velocityX=-1;
+        stars[stars.length-1].velocityY=0;
+        stars[stars.length-1].rotation=1;
+        newStarCounter=0;
+    }
+}
+
 
 
 
