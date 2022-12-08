@@ -108,7 +108,7 @@ function draw(){
         stars[i].move();
         drawImageRot(Star,stars[i].x,stars[i].y,stars[i].width,stars[i].height,stars[i].angle);  
                 
-            if(!(Distance(myShip,stars[i])>25)){
+            if(!(Distance(myShip,stars[i])>(stars[i].width))){
                     myShip.destroyed=true;
                     collision.x=myShip.x;
                     collision.y=myShip.y;
@@ -129,7 +129,7 @@ function draw(){
 const results = stars.filter(element => {
   return element !== null;
 });
-console.log(toString(results)+" "+stars.length);
+//console.log(toString(results)+" "+stars.length);
 stars=results;    
 
 
@@ -162,10 +162,12 @@ stars=results;
 
     ctx.fillText("x :"+Math.round(myShip.x)+" "+ " y: "+Math.round(myShip.y), 100, innerHeight-50); 
     //położenie statku
-    ctx.fillText("distance "+Math.round(Distance(myShip,obstacle)), 100, innerHeight-100); 
-    // test funkcji Distance
-     ctx.fillText("velocity "+Math.round(velocity), 100, innerHeight-140); 
-    // velocity
+    
+    
+//    ctx.fillText("distance "+Math.round(Distance(myShip,obstacle)), 100, innerHeight-100); 
+//    // test funkcji Distance
+//     ctx.fillText("velocity "+Math.round(velocity), 100, innerHeight-140); 
+//    // velocity
     
     
 }
@@ -284,12 +286,52 @@ function Distance(a,b)
 function CreateNewStar(){
      newStarCounter+=0.1
     if(newStarCounter>=30){
-    stars.push(new Obstacle(100,200,40,40));
-        stars[stars.length-1].velocityX=-1;
+    
+        let random=(Math.floor(Math.random() * 4)+1)%4;
+        
+    let newStarX; 
+     let newStarY; 
+        
+    if(random==0){
+        newStarX = 0; 
+        newStarY = Math.floor(Math.random() * innerHeight) + 1; 
+    }
+        
+    if(random==1){
+       newStarX =  innerWidth-1; 
+        newStarY = Math.floor(Math.random() * innerHeight) + 1;  
+    }
+       
+   if(random==2){
+       newStarX = Math.floor(Math.random() * innerWidth) + 1; 
+        newStarY = 0; 
+   }
+       
+  if(random==3){
+       newStarX = Math.floor(Math.random() * innerWidth) + 1; 
+        newStarY = innerHeight-1;  
+  }
+        
+//     let newStarX = Math.floor(Math.random() * innerWidth) + 1; 
+//     let newStarY = Math.floor(Math.random() * innerHeight) + 1; 
+    console.log("wylosowana szerokość: "+newStarX);
+    console.log("wylosowana wysokość: "+newStarY);
+        
+        if(newStarX!=undefined&&newStarY!=undefined){
+    stars.push(new Obstacle(newStarX-20,newStarY-20,40,40));
+        stars[stars.length-1].velocityX=0;
         stars[stars.length-1].velocityY=0;
         stars[stars.length-1].rotation=1;
         newStarCounter=0;
+    
+    
+    
+        }else{
+            console.log("!!! wylosowana wartość :  "+random);
+        }
+        
     }
+     
 }
 
 
