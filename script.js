@@ -290,26 +290,36 @@ function CreateNewStar(){
         let random=(Math.floor(Math.random() * 4)+1)%4;
         
     let newStarX; 
-     let newStarY; 
+     let newStarY;
+    let newStarVelocityX;
+    let newStarVelocityY;
         
     if(random==0){
         newStarX = 0; 
         newStarY = Math.floor(Math.random() * innerHeight) + 1; 
+        newStarVelocityY= Math.floor(Math.random() * 1)-0.5;
+        newStarVelocityX= Math.floor(Math.random() * 2)+2;
     }
         
     if(random==1){
        newStarX =  innerWidth-1; 
-        newStarY = Math.floor(Math.random() * innerHeight) + 1;  
+        newStarY = Math.floor(Math.random() * innerHeight) + 1; 
+        newStarVelocityY= Math.floor(Math.random() * 1)-0.5;
+        newStarVelocityX= (-1)* Math.floor(Math.random() * 2)-2;
     }
        
    if(random==2){
        newStarX = Math.floor(Math.random() * innerWidth) + 1; 
         newStarY = 0; 
+        newStarVelocityY= Math.floor(Math.random() * 2)+2;
+        newStarVelocityX= Math.floor(Math.random() * 1)-0.5;
    }
        
   if(random==3){
        newStarX = Math.floor(Math.random() * innerWidth) + 1; 
         newStarY = innerHeight-1;  
+        newStarVelocityY= (-1)*Math.floor(Math.random() * 2)-2;
+        newStarVelocityX= Math.floor(Math.random() * 1)-0.5;
   }
         
 //     let newStarX = Math.floor(Math.random() * innerWidth) + 1; 
@@ -319,9 +329,10 @@ function CreateNewStar(){
         
         if(newStarX!=undefined&&newStarY!=undefined){
     stars.push(new Obstacle(newStarX-20,newStarY-20,40,40));
-        stars[stars.length-1].velocityX=0;
-        stars[stars.length-1].velocityY=0;
-        stars[stars.length-1].rotation=1;
+        stars[stars.length-1].velocityX=newStarVelocityX;
+        stars[stars.length-1].velocityY=newStarVelocityY;
+        stars[stars.length-1].rotation=(Math.abs(newStarVelocityY)+
+            Math.abs(newStarVelocityX))/3;
         newStarCounter=0;
     
     
