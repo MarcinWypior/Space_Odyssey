@@ -9,9 +9,11 @@ var keys=[];
     Star.src = "Star.png";
     var exhaust= new Image();
     exhaust.src="exhaust.png";
+    var Comet=new Image();
+    Comet.scr="metheor.png";
     
-
-
+var comet=new Obstacle(100,100,200,200);
+comet.angle=0;
 var stars = [];
 var newStarCounter=0;
     
@@ -131,6 +133,11 @@ const results = stars.filter(element => {
 });
 //console.log(toString(results)+" "+stars.length);
 stars=results;    
+    
+    // KOMETA !!!
+    
+    drawImageRot(Starship,100,200,200,200,1);
+    
 
 
     
@@ -324,8 +331,8 @@ function CreateNewStar(){
         
 //     let newStarX = Math.floor(Math.random() * innerWidth) + 1; 
 //     let newStarY = Math.floor(Math.random() * innerHeight) + 1; 
-    console.log("wylosowana szerokość: "+newStarX);
-    console.log("wylosowana wysokość: "+newStarY);
+//    console.log("wylosowana szerokość: "+newStarX);
+//    console.log("wylosowana wysokość: "+newStarY);
         
         if(newStarX!=undefined&&newStarY!=undefined){
     stars.push(new Obstacle(newStarX-20,newStarY-20,40,40));
