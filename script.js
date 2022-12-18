@@ -15,10 +15,10 @@ var keys=[];
     console.log(Starship);
     console.log("Asteroid: ");
     console.log(Asteroid);
+    var gatheredStars=0;
     
-var comet=new Obstacle(100,100,200,200);
-comet.angle=0;
 var stars = [];
+var asteroids = [];
 var newStarCounter=0;
     
     myShip= new Ship(innerWidth/2,innerHeight/2,40,60,0);
@@ -103,6 +103,9 @@ function draw(){
       ctx.fillText("położenie środka y "+Math.round(myShip.y), 100, innerHeight-100); 
     //położenie statku y
     
+    ctx.fillText("położenie środka y "+Math.round(myShip.y), 100, innerHeight-100); 
+    //zebrane gwiazdki
+    ctx.fillText("zebrane gwiazdki "+gatheredStars, 170, 30); 
 
     //tworzenie nowej gwiazdki  !!!
     
@@ -114,13 +117,19 @@ function draw(){
         stars[i].move();
         drawImageRot(Star,stars[i].x,stars[i].y,stars[i].width,stars[i].height,stars[i].angle);  
                 
-            if(!(Distance(myShip,stars[i])>(stars[i].width))){
-                    myShip.destroyed=true;
-                    collision.x=myShip.x;
-                    collision.y=myShip.y;
-                    collision.width=myShip.width;
-                    collision.height=myShip.height;
-                    collision.angle=myShip.angle;
+//            if(!(Distance(myShip,stars[i])>(stars[i].width))){
+//                    myShip.destroyed=true;
+//                    collision.x=myShip.x;
+//                    collision.y=myShip.y;
+//                    collision.width=myShip.width;
+//                    collision.height=myShip.height;
+//                    collision.angle=myShip.angle;
+//            }
+            
+              if((Distance(myShip,stars[i])<(stars[i].width-5))){
+                    console.log("gwiazda znika");
+                    stars[i]=null;
+                    gatheredStars+=1;
             }
           
             if((stars[i].centerX>innerWidth)||(stars[i].centerX<0)||(stars[i].centerY<0)||(stars[i].centerY>innerHeight)){
