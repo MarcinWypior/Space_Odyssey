@@ -9,8 +9,12 @@ var keys=[];
     Star.src = "Star.png";
     var exhaust= new Image();
     exhaust.src="exhaust.png";
-    var Comet=new Image();
-    Comet.scr="metheor.png";
+    var Asteroid=new Image();
+    Asteroid.src="asteroid.png";
+    console.log("Starship: ");
+    console.log(Starship);
+    console.log("Asteroid: ");
+    console.log(Asteroid);
     
 var comet=new Obstacle(100,100,200,200);
 comet.angle=0;
@@ -136,8 +140,8 @@ stars=results;
     
     // KOMETA !!!
     
-    drawImageRot(Starship,100,200,200,200,1);
     
+    drawImageRot(Asteroid,100,100,200,200,0);
 
 
     
