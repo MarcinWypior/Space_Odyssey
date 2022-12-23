@@ -11,15 +11,12 @@ var keys=[];
     exhaust.src="exhaust.png";
     var Asteroid=new Image();
     Asteroid.src="asteroid.png";
-    console.log("Starship: ");
-    console.log(Starship);
-    console.log("Asteroid: ");
-    console.log(Asteroid);
     var gatheredStars=0;
     
 var stars = [];
 var asteroids = [];
 var newStarCounter=0;
+var newAsteroidCounter=0;
     
     myShip= new Ship(innerWidth/2,innerHeight/2,40,60,0);
     collision = new Collision(0,0,40,40,0);
@@ -46,6 +43,9 @@ var acceleration=0;
 var dangle=0;
 
 var starAngle=0;
+
+//CreateNewAsteroidAfterCollision(sizeOfNewAsteroid,x,y,velocityX,velocityY);
+CreateNewAsteroidAfterCollision(100,200,200,0,0);
 
 function draw(){    
     
@@ -105,52 +105,86 @@ function draw(){
     
     ctx.fillText("położenie środka y "+Math.round(myShip.y), 100, innerHeight-100); 
     //zebrane gwiazdki
-    ctx.fillText("zebrane gwiazdki "+gatheredStars, 170, 30); 
+    ctx.fillText("zebrane gwiazdki "+gatheredStars, 170, innerHeight/2); 
+    ctx.fillText("odległość statku od Asteroidy  "+Math.round(Distance(myShip,asteroids[0])), 170, innerHeight/4); 
 
+    console.log("myShip.width: "+(Math.round(myShip.width)));
+    console.log("Math.round(asteroids[0].width)): "+(Math.round(asteroids[0].width)));
+    
     //tworzenie nowej gwiazdki  !!!
     
    CreateNewStar();
-   
+    
+         newAsteroidCounter+=0.1
+    if(newAsteroidCounter>=57){
+   CreateNewAsteroid(100);
+    }
+    
     for(let i=0;i<stars.length-1;i++){
         if(stars[i]!=null)
         {
         stars[i].move();
-        drawImageRot(Star,stars[i].x,stars[i].y,stars[i].width,stars[i].height,stars[i].angle);  
-                
-//            if(!(Distance(myShip,stars[i])>(stars[i].width))){
-//                    myShip.destroyed=true;
-//                    collision.x=myShip.x;
-//                    collision.y=myShip.y;
-//                    collision.width=myShip.width;
-//                    collision.height=myShip.height;
-//                    collision.angle=myShip.angle;
-//            }
+            drawImageRot(Star,stars[i].x,stars[i].y,stars[i].width,stars[i].height,stars[i].angle);  
+            
+            
+
+            
+            if((stars[i].centerX>innerWidth)||(stars[i].centerX<0)||(stars[i].centerY<0)||(stars[i].centerY>innerHeight)){
+                            console.log("gwiazda znika");
+                            stars[i]=null;
+                        }
+            
             
               if((Distance(myShip,stars[i])<(stars[i].width-5))){
-                    console.log("gwiazda znika");
                     stars[i]=null;
                     gatheredStars+=1;
             }
           
-            if((stars[i].centerX>innerWidth)||(stars[i].centerX<0)||(stars[i].centerY<0)||(stars[i].centerY>innerHeight)){
-                            console.log("gwiazda znika");
-                            stars[i]=null;
-                            //console.log(stars);
-                        }
+            
         }
+        
+
+        
+    }
+    
+    for(let i=0;i<asteroids.length-1;i++){
+        
+        
+                    if((Distance(myShip,asteroids[i])<(asteroids[i].width/2+myShip.width/2))){
+                    myShip.destroyed=true;
+                    collision.x=myShip.x;
+                    collision.y=myShip.y;
+                    collision.width=myShip.width;
+                    collision.height=myShip.height;
+                    collision.angle=myShip.angle;
+            }
+        
+        
+                if(asteroids[i]!=null){
+                    asteroids[i].move();
+            drawImageRot(Asteroid,asteroids[i].x,asteroids[i].y,asteroids[i].width,asteroids[i].height,asteroids[i].angle);         
+        }
+        
+        
     }
     
   
-const results = stars.filter(element => {
+const resultsStars = stars.filter(element => {
   return element !== null;
 });
 //console.log(toString(results)+" "+stars.length);
-stars=results;    
+stars=resultsStars;    
+    
+    const resultsAsteroids = asteroids.filter(element => {
+  return element !== null;
+});
+//console.log(toString(results)+" "+stars.length);
+asteroids=resultsAsteroids;   
     
     // KOMETA !!!
     
     
-    drawImageRot(Asteroid,100,100,200,200,0);
+    //drawImageRot(Asteroid,100,100,200,200,0); grafika asteroidy
 
 
     
@@ -366,6 +400,73 @@ function CreateNewStar(){
 }
 
 
+function CreateNewAsteroid(sizeOfNewAsteroid){
 
+    let random=(Math.floor(Math.random() * 4)+1)%4;
+        
+    let newAsteroidX; 
+     let newAsteroidY;
+    let newAsteroidVelocityX;
+    let newAsteroidVelocityY;
+        
+    if(random==0){
+        newAsteroidX = 0; 
+        newAsteroidY = Math.floor(Math.random() * innerHeight) + 1; 
+        newAsteroidVelocityY= Math.floor(Math.random() * 1)-0.5;
+        newAsteroidVelocityX= Math.floor(Math.random() * 2)+2;
+    }
+        
+    if(random==1){
+       newAsteroidX =  innerWidth-1; 
+        newAsteroidY = Math.floor(Math.random() * innerHeight) + 1; 
+        newAsteroidVelocityY= Math.floor(Math.random() * 1)-0.5;
+        newAsteroidVelocityX= (-1)* Math.floor(Math.random() * 2)-2;
+    }
+       
+   if(random==2){
+       newAsteroidX = Math.floor(Math.random() * innerWidth) + 1; 
+        newAsteroidY = 0; 
+        newAsteroidVelocityY= Math.floor(Math.random() * 2)+2;
+        newAsteroidVelocityX= Math.floor(Math.random() * 1)-0.5;
+   }
+       
+  if(random==3){
+       newAsteroidX = Math.floor(Math.random() * innerWidth) + 1; 
+        newAsteroidY = innerHeight-1;  
+        newAsteroidVelocityY= (-1)*Math.floor(Math.random() * 2)-2;
+        newAsteroidVelocityX= Math.floor(Math.random() * 1)-0.5;
+  }
+        
+        
+        if(newAsteroidX!=undefined&&newAsteroidY!=undefined){
+    asteroids.push(new Obstacle(newAsteroidX-20,newAsteroidY-20,sizeOfNewAsteroid,sizeOfNewAsteroid));
+        asteroids[asteroids.length-1].velocityX=newAsteroidVelocityX;
+        asteroids[asteroids.length-1].velocityY=newAsteroidVelocityY;
+        asteroids[asteroids.length-1].rotation=(Math.abs(newAsteroidVelocityY)+
+            Math.abs(newAsteroidVelocityX))/3;
+        newAsteroidCounter=0;
+    
+    
+        }else{
+            console.log("!!! wylosowana wartość :  "+random);
+        }
+        
+}
 
+function CreateNewAsteroidAfterCollision(sizeOfNewAsteroid,x,y,velocityX,velocityY){
+
+    let random=(Math.floor(Math.random() * 4)+1)%4;
+        
+    let newAsteroidX; 
+     let newAsteroidY;
+    let newAsteroidVelocityX;
+    let newAsteroidVelocityY;
+
+     asteroids.push(new Obstacle(x-sizeOfNewAsteroid/2,y-sizeOfNewAsteroid/2,sizeOfNewAsteroid,sizeOfNewAsteroid));
+        asteroids[asteroids.length-1].velocityX=velocityX;
+        asteroids[asteroids.length-1].velocityY=velocityY;
+        asteroids[asteroids.length-1].rotation=0;
+    
+    console.log("próbna asteroida stworzona");
+}
 
