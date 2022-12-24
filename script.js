@@ -108,8 +108,8 @@ function draw(){
     ctx.fillText("zebrane gwiazdki "+gatheredStars, 170, innerHeight/2); 
     ctx.fillText("odległość statku od Asteroidy  "+Math.round(Distance(myShip,asteroids[0])), 170, innerHeight/4); 
 
-    console.log("myShip.width: "+(Math.round(myShip.width)));
-    console.log("Math.round(asteroids[0].width)): "+(Math.round(asteroids[0].width)));
+    //console.log("myShip.width: "+(Math.round(myShip.width)));
+    //console.log("Math.round(asteroids[0].width)): "+(Math.round(asteroids[0].width)));
     
     //tworzenie nowej gwiazdki  !!!
     
@@ -121,49 +121,54 @@ function draw(){
     }
     
     for(let i=0;i<stars.length-1;i++){
-        if(stars[i]!=null)
+        if(stars[i]!==null)
         {
         stars[i].move();
             drawImageRot(Star,stars[i].x,stars[i].y,stars[i].width,stars[i].height,stars[i].angle);  
             
+                            
             
-
-            
-            if((stars[i].centerX>innerWidth)||(stars[i].centerX<0)||(stars[i].centerY<0)||(stars[i].centerY>innerHeight)){
-                            console.log("gwiazda znika");
+            if((stars[i].centerX()>innerWidth)||(stars[i].centerX()<0)||(stars[i].centerY()<0)||(stars[i].centerY()>innerHeight)){
                             stars[i]=null;
+                console.log("gwiazdka znika");
+                continue;
                         }
             
             
               if((Distance(myShip,stars[i])<(stars[i].width-5))){
                     stars[i]=null;
                     gatheredStars+=1;
+                  continue;
             }
-          
-            
+                     
         }
-        
-
         
     }
     
     for(let i=0;i<asteroids.length-1;i++){
         
         
-                    if((Distance(myShip,asteroids[i])<(asteroids[i].width/2+myShip.width/2))){
+                    if(Distance(myShip,asteroids[i])<(asteroids[i].width/2+myShip.width/4)){
                     myShip.destroyed=true;
                     collision.x=myShip.x;
                     collision.y=myShip.y;
                     collision.width=myShip.width;
                     collision.height=myShip.height;
                     collision.angle=myShip.angle;
-            }
+                    }
         
         
                 if(asteroids[i]!=null){
                     asteroids[i].move();
-            drawImageRot(Asteroid,asteroids[i].x,asteroids[i].y,asteroids[i].width,asteroids[i].height,asteroids[i].angle);         
-        }
+            drawImageRot(Asteroid,asteroids[i].x,asteroids[i].y,asteroids[i].width,asteroids[i].height,asteroids[i].angle);
+                    
+                }
+        
+                    if((asteroids[i].centerX()>innerWidth+100)||(asteroids[i].centerX()<-100)||(asteroids[i].centerY()<-100)||(asteroids[i].centerY()>innerHeight+100)){
+                            asteroids[i]=null;
+                            console.log("asteroida znika");
+                            continue;
+                        }
         
         
     }
@@ -181,6 +186,8 @@ stars=resultsStars;
 //console.log(toString(results)+" "+stars.length);
 asteroids=resultsAsteroids;   
     
+    
+    console.log("asteroidy:" +asteroids.length + "\n gwiazdki:"+stars.length);
     // KOMETA !!!
     
     
@@ -251,7 +258,7 @@ Obstacle.prototype.centerX = function(){
 }
 
 Obstacle.prototype.centerY = function(){
- return (this.y+this.height/2);   
+ return (this.y+this.height/2);     
 }
 
 Obstacle.prototype.move = function(){
@@ -382,7 +389,7 @@ function CreateNewStar(){
 //    console.log("wylosowana wysokość: "+newStarY);
         
         if(newStarX!=undefined&&newStarY!=undefined){
-    stars.push(new Obstacle(newStarX-20,newStarY-20,40,40));
+        stars.push(new Obstacle(newStarX-20,newStarY-20,40,40));
         stars[stars.length-1].velocityX=newStarVelocityX;
         stars[stars.length-1].velocityY=newStarVelocityY;
         stars[stars.length-1].rotation=(Math.abs(newStarVelocityY)+
