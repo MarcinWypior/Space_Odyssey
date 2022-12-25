@@ -185,18 +185,39 @@ function draw(){
                         continue;
                     
                     
-                    console.log("odległość asteroid"+Distance(asteroids[i],asteroids[j]));
+                    //console.log("odległość asteroid"+Distance(asteroids[i],asteroids[j]));
                     
                     if(Distance(asteroids[i],asteroids[j])<(asteroids[i].width/2.4+asteroids[i].width/2.4))
                     {
-                        console.log("asteroidy znikają");
+                        console.log("asteroidy zderzyły się ");
+                       
+                       /* CreateNewAsteroidAfterCollision(
+                       sizeOfNewAsteroid,
+                       x,
+                       y,
+                       velocityX,
+                       velocityY) 
+                       
+            CreateNewAsteroidAfterCollision(
+                    asteroids[i].width/2.4,
+                    asteroids[i].x,
+                    asteroids[i].y,
+                    asteroids[i].velocityX+asteroids[j].velocityX,
+                    asteroids[i].velocityY++asteroids[j].velocityY);
+                        
+                    */
+                        
+                                    CreateNewAsteroidAfterCollision(
+                    asteroids[i].width/2.4,
+                    (asteroids[i].centerX + asteroids[j].centerX)/2,
+                    (asteroids[i].centerY + asteroids[i].centerY)/2,
+                    0,
+                    0);
+                        
                         asteroids[i]=null;
                         asteroids[j]=null; 
-                    }  
-                    
-                    
+                    }                   
                 }
-        
         
     }
     
