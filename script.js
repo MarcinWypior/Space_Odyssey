@@ -45,7 +45,7 @@ var dangle=0;
 var starAngle=0;
 
 //CreateNewAsteroidAfterCollision(sizeOfNewAsteroid,x,y,velocityX,velocityY);
-CreateNewAsteroidAfterCollision(100,200,200,0,0);
+//CreateNewAsteroidAfterCollision(100,200,200,0,0);
 
 function draw(){    
     
@@ -105,9 +105,11 @@ function draw(){
     
     ctx.fillText("położenie środka y "+Math.round(myShip.y), 100, innerHeight-100); 
     //zebrane gwiazdki
-    ctx.fillText("zebrane gwiazdki "+gatheredStars, 170, innerHeight/2); 
-    ctx.fillText("odległość statku od Asteroidy  "+Math.round(Distance(myShip,asteroids[0])), 170, innerHeight/4); 
-
+    ctx.fillText("zebrane gwiazdki "+gatheredStars, innerWidth-170, innerHeight-100); 
+    
+    if(asteroids[0]!=null){
+            ctx.fillText("odległość statku od Asteroidy  "+Math.round(Distance(myShip,asteroids[0])), 170, innerHeight/4); 
+}
     //console.log("myShip.width: "+(Math.round(myShip.width)));
     //console.log("Math.round(asteroids[0].width)): "+(Math.round(asteroids[0].width)));
     
@@ -120,7 +122,7 @@ function draw(){
    CreateNewAsteroid(100);
     }
     
-    for(let i=0;i<stars.length-1;i++){
+    for(let i=0;i<stars.length;i++){
         if(stars[i]!==null)
         {
         stars[i].move();
@@ -145,10 +147,11 @@ function draw(){
         
     }
     
-    for(let i=0;i<asteroids.length-1;i++){
+    for(let i=0;i<asteroids.length;i++){
         
         
                     if(Distance(myShip,asteroids[i])<(asteroids[i].width/2+myShip.width/4)){
+                        console.log("Kolizja z Asteroidą");
                     myShip.destroyed=true;
                     collision.x=myShip.x;
                     collision.y=myShip.y;
@@ -158,7 +161,7 @@ function draw(){
                     }
         
         
-                if(asteroids[i]!=null){
+                if(asteroids[i]!==null){
                     asteroids[i].move();
             drawImageRot(Asteroid,asteroids[i].x,asteroids[i].y,asteroids[i].width,asteroids[i].height,asteroids[i].angle);
                     
@@ -169,7 +172,6 @@ function draw(){
                             console.log("asteroida znika");
                             continue;
                         }
-        
         
     }
     
