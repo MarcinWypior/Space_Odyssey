@@ -209,11 +209,13 @@ function draw(){
                         
                                     CreateNewAsteroidAfterCollision(
                     asteroids[i].width/2.4,
-                    (asteroids[i].centerX + asteroids[j].centerX)/2,
-                    (asteroids[i].centerY + asteroids[i].centerY)/2,
-                    0,
-                    0);
+                    (asteroids[i].centerX() + asteroids[j].centerX())/2,
+                    (asteroids[i].centerY() + asteroids[i].centerY())/2,
+                    asteroids[i].velocityX + asteroids[j].velocityX,
+                    asteroids[i].velocityY + asteroids[i].velocityY );
                         
+                    asteroids[asteroids.length-1].rotation=Math.random()*5;
+                                        
                         asteroids[i]=null;
                         asteroids[j]=null; 
                     }                   
