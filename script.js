@@ -45,8 +45,8 @@ var dangle=0;
 var starAngle=0;
 
 //CreateNewAsteroidAfterCollision(sizeOfNewAsteroid,x,y,velocityX,velocityY);
-//CreateNewAsteroidAfterCollision(100,200,200,0,0);
-
+CreateNewAsteroidAfterCollision(100,200,200,1,0);
+CreateNewAsteroidAfterCollision(100,innerWidth-200,200,-1,0);
 function draw(){    
     
     dx=0;
@@ -132,7 +132,7 @@ function draw(){
             
             if((stars[i].centerX()>innerWidth)||(stars[i].centerX()<0)||(stars[i].centerY()<0)||(stars[i].centerY()>innerHeight)){
                             stars[i]=null;
-                console.log("gwiazdka znika");
+                //console.log("gwiazdka znika");
                 continue;
                         }
             
@@ -149,9 +149,11 @@ function draw(){
     
     for(let i=0;i<asteroids.length;i++){
         
+        if(asteroids[i]==null)
+            continue;
         
                     if(Distance(myShip,asteroids[i])<(asteroids[i].width/2+myShip.width/4)){
-                        console.log("Kolizja z Asteroidą");
+                        //console.log("Kolizja z Asteroidą");
                     myShip.destroyed=true;
                     collision.x=myShip.x;
                     collision.y=myShip.y;
@@ -169,9 +171,32 @@ function draw(){
         
                     if((asteroids[i].centerX()>innerWidth+100)||(asteroids[i].centerX()<-100)||(asteroids[i].centerY()<-100)||(asteroids[i].centerY()>innerHeight+100)){
                             asteroids[i]=null;
-                            console.log("asteroida znika");
+                            //console.log("asteroida znika");
                             continue;
                         }
+        
+        
+                for(let j=0; j<asteroids.length;j++){
+                    
+                    if(i===j)
+                    continue;
+                    
+                    if(asteroids[i]==null || asteroids[j]==null)
+                        continue;
+                    
+                    
+                    console.log("odległość asteroid"+Distance(asteroids[i],asteroids[j]));
+                    
+                    if(Distance(asteroids[i],asteroids[j])<(asteroids[i].width/2.4+asteroids[i].width/2.4))
+                    {
+                        console.log("asteroidy znikają");
+                        asteroids[i]=null;
+                        asteroids[j]=null; 
+                    }  
+                    
+                    
+                }
+        
         
     }
     
