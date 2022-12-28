@@ -15,6 +15,7 @@ var keys=[];
     
 var stars = [];
 var asteroids = [];
+var collisions= [];
 var newStarCounter=0;
 var newAsteroidCounter=0;
     
@@ -45,8 +46,8 @@ var dangle=0;
 var starAngle=0;
 
 //CreateNewAsteroidAfterCollision(sizeOfNewAsteroid,x,y,velocityX,velocityY);
-CreateNewAsteroidAfterCollision(100,200,200,1,0);
-CreateNewAsteroidAfterCollision(100,innerWidth-200,200,-1,0);
+CreateNewAsteroidAfterCollision(100,200,innerHeight/2,1,0);
+CreateNewAsteroidAfterCollision(100,innerWidth-200,innerHeight/2,-1,0);
 function draw(){    
     
     dx=0;
@@ -95,8 +96,6 @@ function draw(){
     ctx.font = "30px Comic Sans MS";
     ctx.fillStyle = "red";
     ctx.textAlign = "center";
-        
-    //TO DO:: dopisz metodę do Ship center  zwracającą prawdziwy środek staktu
       
       ctx.fillText("położenie środka x "+Math.round(myShip.x), 100, innerHeight-150); 
     //położenie statku x 
@@ -117,8 +116,10 @@ function draw(){
     
    CreateNewStar();
     
+    
+    
          newAsteroidCounter+=0.1
-    if(newAsteroidCounter>=57){
+    if(newAsteroidCounter>= (57/(Math.sqrt(gatheredStars)+1))){
    CreateNewAsteroid(100);
     }
     
@@ -185,27 +186,32 @@ function draw(){
                         continue;
                     
                     
-                    //console.log("odległość asteroid"+Distance(asteroids[i],asteroids[j]));
-                    
                     if(Distance(asteroids[i],asteroids[j])<(asteroids[i].width/2.4+asteroids[i].width/2.4))
                     {
                         console.log("asteroidy zderzyły się ");
-                       
-                       /* CreateNewAsteroidAfterCollision(
-                       sizeOfNewAsteroid,
-                       x,
-                       y,
-                       velocityX,
-                       velocityY) 
-                       
-            CreateNewAsteroidAfterCollision(
-                    asteroids[i].width/2.4,
-                    asteroids[i].x,
-                    asteroids[i].y,
-                    asteroids[i].velocityX+asteroids[j].velocityX,
-                    asteroids[i].velocityY++asteroids[j].velocityY);
+                        /*
                         
-                    */
+                        
+                        */
+                        
+                        collisions.push(
+                        new Collision( 
+                            
+//                            (asteroids[i].centerX()+ asteroids[j].centerX())/2,
+//                            (asteroids[i].centerY() + asteroids[i].centerY())/2,
+//                            Math.sqrt(asteroids[i].width + asteroids[i].width),
+//                            Math.sqrt(asteroids[i].width + asteroids[i].width),
+//                            0
+                            
+                             (asteroids[i].centerX()+ asteroids[j].centerX())/2,
+                            (asteroids[i].centerY() + asteroids[i].centerY())/2,
+                            100,
+                            100,
+                            0
+                        
+                                            )
+                            );
+                       
                         
                                     CreateNewAsteroidAfterCollision(
                     asteroids[i].width/2.4,
@@ -215,7 +221,17 @@ function draw(){
                     asteroids[i].velocityY + asteroids[i].velocityY );
                         
                     asteroids[asteroids.length-1].rotation=Math.random()*5;
-                                        
+                        
+                        if(Math.abs(asteroids[asteroids.length-1].velocityX)
+                           +Math.abs(asteroids[asteroids.length-1].velocityY<0.5)){
+                           
+                            let randomDirecition=Math.random();
+                            asteroids[asteroids.length-1].velocityY=Math.sin(randomDirecition)*0.4;
+                            asteroids[asteroids.length-1].velocityX=Math.cos(randomDirecition)*0.4;
+                                                    
+                        
+                        }
+                        
                         asteroids[i]=null;
                         asteroids[j]=null; 
                     }                   
@@ -223,6 +239,15 @@ function draw(){
         
     }
     
+    for(let i=0;i<collisions.length;i++){
+    drawImageRot(collision.image,collisions[i].x-collisions[i].width/2,collisions[i].y-                                     collisions[i].height/2,collisions[i].width*2,collisions[i].height*2,0);
+        
+        collisions[i].nextState();
+        if(collisions[i].state>120)
+            collisions[i]=null;
+    }
+    
+    console.log("ile kolizji "+collisions.length);
   
 const resultsStars = stars.filter(element => {
   return element !== null;
@@ -235,6 +260,12 @@ stars=resultsStars;
 });
 //console.log(toString(results)+" "+stars.length);
 asteroids=resultsAsteroids;   
+    
+        const resultsCollisions = collisions.filter(element => {
+  return element !== null;
+});
+//console.log(toString(results)+" "+stars.length);
+collisions=resultsCollisions;   
     
     
     console.log("asteroidy:" +asteroids.length + "\n gwiazdki:"+stars.length);
@@ -356,6 +387,22 @@ function Collision(px,py,pwidth,pheight,pangle)
  this.image.src="e1.png";
 }
 
+Collision.prototype.centerX = function(){
+ return (this.x+this.width/2);   
+}
+
+Collision.prototype.centerY = function(){
+ return (this.y+this.height/2);   
+}
+
+Collision.prototype.setCenterX = function(newPos){
+ this.x=newPos-this.width/2;   
+}
+
+Collision.prototype.setCenterY = function(newPos){
+ this.y=newPos-this.height/2; 
+}
+
 Collision.prototype.nextState = function() {
     if(this.state<100)   
         {
@@ -433,10 +480,6 @@ function CreateNewStar(){
         newStarVelocityX= Math.floor(Math.random() * 1)-0.5;
   }
         
-//     let newStarX = Math.floor(Math.random() * innerWidth) + 1; 
-//     let newStarY = Math.floor(Math.random() * innerHeight) + 1; 
-//    console.log("wylosowana szerokość: "+newStarX);
-//    console.log("wylosowana wysokość: "+newStarY);
         
         if(newStarX!=undefined&&newStarY!=undefined){
         stars.push(new Obstacle(newStarX-20,newStarY-20,40,40));
@@ -445,8 +488,7 @@ function CreateNewStar(){
         stars[stars.length-1].rotation=(Math.abs(newStarVelocityY)+
             Math.abs(newStarVelocityX))/3;
         newStarCounter=0;
-    
-    
+            
     
         }else{
             console.log("!!! wylosowana wartość :  "+random);
