@@ -20,7 +20,7 @@ var newStarCounter=0;
 var newAsteroidCounter=0;
     
     myShip= new Ship(innerWidth/2,innerHeight/2,40,60,0);
-    collision = new Collision(0,0,40,40,0);
+    collision = new Collision(-1000,-1000,40,40,0);
     collision.image=new Image();
     collision.image.src="e1.png";
     var counter=0;
@@ -188,14 +188,14 @@ function draw(){
                     
                     if(Distance(asteroids[i],asteroids[j])<(asteroids[i].width/2.4+asteroids[i].width/2.4))
                     {
-                        console.log("asteroidy zderzyły się ");
+                        //console.log("asteroidy zderzyły się ");
                         /*
-                        
-                        
+                        Zderzenie Asteroid
                         */
                         
                         collisions.push(
                         new Collision( 
+                            
                             
 //                            (asteroids[i].centerX()+ asteroids[j].centerX())/2,
 //                            (asteroids[i].centerY() + asteroids[i].centerY())/2,
@@ -203,8 +203,8 @@ function draw(){
 //                            Math.sqrt(asteroids[i].width + asteroids[i].width),
 //                            0
                             
-                             (asteroids[i].centerX()+ asteroids[j].centerX())/2,
-                            (asteroids[i].centerY() + asteroids[i].centerY())/2,
+                             500,
+                            500,
                             100,
                             100,
                             0
@@ -247,6 +247,10 @@ function draw(){
             collisions[i]=null;
     }
     
+    
+    
+    
+    
     console.log("ile kolizji "+collisions.length);
   
 const resultsStars = stars.filter(element => {
@@ -268,7 +272,9 @@ asteroids=resultsAsteroids;
 collisions=resultsCollisions;   
     
     
-    console.log("asteroidy:" +asteroids.length + "\n gwiazdki:"+stars.length);
+    //console.table(collisions);
+    
+    //console.log("asteroidy:" +asteroids.length + "\n gwiazdki:"+stars.length);
     // KOMETA !!!
     
     
@@ -404,7 +410,7 @@ Collision.prototype.setCenterY = function(newPos){
 }
 
 Collision.prototype.nextState = function() {
-    if(this.state<100)   
+    if(this.state<150)   
         {
         this.state=this.state+1.5;
         if(this.state===1){
