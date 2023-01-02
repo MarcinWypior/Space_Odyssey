@@ -186,51 +186,63 @@ function draw(){
                         continue;
                     
                     
-                    if(Distance(asteroids[i],asteroids[j])<(asteroids[i].width/2.4+asteroids[i].width/2.4))
+                    if(Distance(asteroids[i],asteroids[j])<(asteroids[i].width/2.5+asteroids[i].width/2.5))
                     {
                         //console.log("asteroidy zderzyły się ");
                         /*
                         Zderzenie Asteroid
                         */
                         
-                        collisions.push(
-                        new Collision( 
-                            
-                            
-//                            (asteroids[i].centerX()+ asteroids[j].centerX())/2,
-//                            (asteroids[i].centerY() + asteroids[i].centerY())/2,
-//                            Math.sqrt(asteroids[i].width + asteroids[i].width),
-//                            Math.sqrt(asteroids[i].width + asteroids[i].width),
+//                        collisions.push(
+//                        new Collision( 
+//                            
+//                             ((asteroids[i].centerX()+ asteroids[j].centerX())/2)
+//                            -((asteroids[i].width+ asteroids[j].width)/2),
+//                            ((asteroids[i].centerY() + asteroids[i].centerY())/2)
+//                            -((asteroids[i].height+ asteroids[j].height)/2),
+//                            100,
+//                            100,
 //                            0
+//                                            )
+//                            );
+                       let amountOfNewPieces=(asteroids[i].width + asteroids[j].width)/40;
+                        
+                        
+                        for(let k=0;k<amountOfNewPieces;k++){
                             
-                             500,
-                            500,
-                            100,
-                            100,
-                            0
-                        
-                                            )
-                            );
-                       
-                        
                                     CreateNewAsteroidAfterCollision(
-                    asteroids[i].width/2.4,
-                    (asteroids[i].centerX() + asteroids[j].centerX())/2,
-                    (asteroids[i].centerY() + asteroids[i].centerY())/2,
+                    (asteroids[i].width/2.4 + asteroids[j].width/2.4)/2,
+                    (asteroids[i].centerX() + asteroids[j].centerX())/2 +Math.round(Math.sin(2*Math.PI/amountOfNewPieces*k) * (asteroids[i].width/2 + asteroids[j].width/3)),
+                    (asteroids[i].centerY() + asteroids[i].centerY())/2 +Math.round(Math.cos(2*Math.PI/amountOfNewPieces*k) * (asteroids[i].width/2 + asteroids[j].width/3)),
                     asteroids[i].velocityX + asteroids[j].velocityX,
                     asteroids[i].velocityY + asteroids[i].velocityY );
+                            
+                            
+                            
+                        };
                         
-                    asteroids[asteroids.length-1].rotation=Math.random()*5;
-                        
-                        if(Math.abs(asteroids[asteroids.length-1].velocityX)
-                           +Math.abs(asteroids[asteroids.length-1].velocityY<0.5)){
+                    //asteroids[asteroids.length-1].rotation=Math.random()*5;
                            
-                            let randomDirecition=Math.random();
-                            asteroids[asteroids.length-1].velocityY=Math.sin(randomDirecition)*0.4;
-                            asteroids[asteroids.length-1].velocityX=Math.cos(randomDirecition)*0.4;
-                                                    
                         
-                        }
+                            
+                            for(let l=0;l<asteroids.length;l++){
+                             
+                                if(asteroids[l]==null)
+                                    continue;
+                                
+                                
+                                if(Math.abs(asteroids[l].velocityX)
+                                   +Math.abs(asteroids[l].velocityY<0.5)){
+                                     let randomDirecition=Math.random();
+                                    
+                                   asteroids[l].velocityY=Math.sin(randomDirecition)*0.4;
+                                    asteroids[l].velocityX=Math.cos(randomDirecition)*0.4;
+                                }       
+                                
+                                
+                                
+                            }
+                        
                         
                         asteroids[i]=null;
                         asteroids[j]=null; 
