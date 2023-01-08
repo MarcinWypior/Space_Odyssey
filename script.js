@@ -541,14 +541,14 @@ function CreateNewAsteroid(sizeOfNewAsteroid){
     if(random==0){
         newAsteroidX = 0; 
         newAsteroidY = Math.floor(Math.random() * innerHeight) + 1; 
-        newAsteroidVelocityY= Math.floor(Math.random() * 0.4)-0.5;
+        newAsteroidVelocityY= Math.floor(Math.random() * 1)-0.5;
         newAsteroidVelocityX= Math.floor(Math.random() * 0.7)+2;
     }
         
     if(random==1){
        newAsteroidX =  innerWidth-1; 
         newAsteroidY = Math.floor(Math.random() * innerHeight) + 1; 
-        newAsteroidVelocityY= Math.floor(Math.random() * 0.4)-0.5;
+        newAsteroidVelocityY= Math.floor(Math.random() * 1)-0.5;
         newAsteroidVelocityX= (-1)* Math.floor(Math.random() * 0.7)-2;
     }
        
@@ -556,16 +556,19 @@ function CreateNewAsteroid(sizeOfNewAsteroid){
        newAsteroidX = Math.floor(Math.random() * innerWidth) + 1; 
         newAsteroidY = 0; 
         newAsteroidVelocityY= Math.floor(Math.random() * 0.7)+2;
-        newAsteroidVelocityX= Math.floor(Math.random() * 0.4)-0.5;
+        newAsteroidVelocityX= Math.floor(Math.random() * 1)-0.5;
    }
        
   if(random==3){
        newAsteroidX = Math.floor(Math.random() * innerWidth) + 1; 
         newAsteroidY = innerHeight-1;  
         newAsteroidVelocityY= (-1)*Math.floor(Math.random() * 0.7)-2;
-        newAsteroidVelocityX= Math.floor(Math.random() * 0.4)-0.5;
+        newAsteroidVelocityX= Math.floor(Math.random() * 1)-0.5;
   }
         
+    
+    newAsteroidVelocityX/=2;
+    newAsteroidVelocityY/=2;
         
         if(newAsteroidX!=undefined&&newAsteroidY!=undefined){
     asteroids.push(new Obstacle(newAsteroidX-20,newAsteroidY-20,sizeOfNewAsteroid,sizeOfNewAsteroid));
