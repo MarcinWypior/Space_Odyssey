@@ -97,18 +97,18 @@ function draw(){
     ctx.fillStyle = "red";
     ctx.textAlign = "center";
       
-      ctx.fillText("położenie środka x "+Math.round(myShip.x), 100, innerHeight-150); 
+     // ctx.fillText("położenie środka x "+Math.round(myShip.x), 100, innerHeight-150); 
     //położenie statku x 
-      ctx.fillText("położenie środka y "+Math.round(myShip.y), 100, innerHeight-100); 
+     // ctx.fillText("położenie środka y "+Math.round(myShip.y), 100, innerHeight-100); 
     //położenie statku y
     
-    ctx.fillText("położenie środka y "+Math.round(myShip.y), 100, innerHeight-100); 
+    //ctx.fillText("położenie środka y "+Math.round(myShip.y), 100, innerHeight-100); 
     //zebrane gwiazdki
-    ctx.fillText("zebrane gwiazdki "+gatheredStars, innerWidth-170, innerHeight-100); 
+    ctx.fillText("zebrane gwiazdki "+gatheredStars, innerWidth-150, innerHeight-30); 
     
-    if(asteroids[0]!=null){
-            ctx.fillText("odległość statku od Asteroidy  "+Math.round(Distance(myShip,asteroids[0])), 170, innerHeight/4); 
-}
+//    if(asteroids[0]!=null){
+//            ctx.fillText("odległość statku od Asteroidy  "+Math.round(Distance(myShip,asteroids[0])), 170, innerHeight/4); 
+//}
     //console.log("myShip.width: "+(Math.round(myShip.width)));
     //console.log("Math.round(asteroids[0].width)): "+(Math.round(asteroids[0].width)));
     
@@ -119,8 +119,8 @@ function draw(){
     
     
          newAsteroidCounter+=0.1
-    if(newAsteroidCounter>= (57/(Math.sqrt(gatheredStars)+1))){
-   CreateNewAsteroid(100);
+    if(newAsteroidCounter>= (57/(Math.sqrt(gatheredStars+Math.sqrt(innerHeight*innerWidth)/3000)+1))){
+   CreateNewAsteroid(Math.random()*100+50);
     }
     
     for(let i=0;i<stars.length;i++){
@@ -205,45 +205,57 @@ function draw(){
 //                            0
 //                                            )
 //                            );
-                       let amountOfNewPieces=(asteroids[i].width + asteroids[j].width)/40;
+                       let amountOfNewPieces=Math.floor((asteroids[i].width + asteroids[j].width)/40);
                         
                         
                         for(let k=0;k<amountOfNewPieces;k++){
                             
                                     CreateNewAsteroidAfterCollision(
-                    (asteroids[i].width/2.4 + asteroids[j].width/2.4)/2,
+                    (asteroids[i].width/2.4 + asteroids[j].width/2.4)/(2.5),
                     (asteroids[i].centerX() + asteroids[j].centerX())/2 +Math.round(Math.sin(2*Math.PI/amountOfNewPieces*k) * (asteroids[i].width/2 + asteroids[j].width/3)),
                     (asteroids[i].centerY() + asteroids[i].centerY())/2 +Math.round(Math.cos(2*Math.PI/amountOfNewPieces*k) * (asteroids[i].width/2 + asteroids[j].width/3)),
-                    asteroids[i].velocityX + asteroids[j].velocityX,
-                    asteroids[i].velocityY + asteroids[i].velocityY );
+                    (asteroids[i].velocityX * asteroids[i].width + asteroids[j].velocityX*asteroids[j].width)/100,
+                    (asteroids[i].velocityY * asteroids[i].width + asteroids[j].velocityY* asteroids[j].width)/100 );
                             
+                            // TUTAJ Masz wstawić losową prędkość dla zerowych
                             
-                            
+                             if(
+                                    Math.abs((asteroids[asteroids.length-1].velocityX)
+                                   +Math.abs(asteroids[asteroids.length-1].velocityY))
+                                             <0.4)
+                                
+                                {
+                                     let randomDirecition=Math.random();
+                                    asteroids[asteroids.length-1].velocityY=Math.sin(randomDirecition)*0.4;
+                                    asteroids[asteroids.length-1].velocityX=Math.cos(randomDirecition)*0.4;
+                                }       
+                             
                         };
                         
                     //asteroids[asteroids.length-1].rotation=Math.random()*5;
-                           
                         
-                            
-                            for(let l=0;l<asteroids.length;l++){
-                             
-                                if(asteroids[l]==null)
-                                    continue;
-                                
-                                
-                                if(Math.abs(asteroids[l].velocityX)
-                                   +Math.abs(asteroids[l].velocityY<0.5)){
-                                     let randomDirecition=Math.random();
-                                    
-                                   asteroids[l].velocityY=Math.sin(randomDirecition)*0.4;
-                                    asteroids[l].velocityX=Math.cos(randomDirecition)*0.4;
-                                }       
-                                
-                                
-                                
-                            }
+                                      
+                               
+
                         
-                        
+//                            for(let l=0;l<asteroids.length;l++){
+//                             
+//                                if(asteroids[l]==null)
+//                                    continue;
+//                                               
+//                                if(
+//                                    Math.abs((asteroids[l].velocityX)
+//                                   +Math.abs(asteroids[l].velocityY)
+//                                             <0.4))
+//                                
+//                                {
+//                                     let randomDirecition=Math.random();
+//                                    asteroids[l].velocityY=Math.sin(randomDirecition)*0.4;
+//                                    asteroids[l].velocityX=Math.cos(randomDirecition)*0.4;
+//                                }       
+//                                   
+//                            }
+                         
                         asteroids[i]=null;
                         asteroids[j]=null; 
                     }                   
@@ -320,7 +332,7 @@ collisions=resultsCollisions;
     }
         
 
-    ctx.fillText("x :"+Math.round(myShip.x)+" "+ " y: "+Math.round(myShip.y), 100, innerHeight-50); 
+    //ctx.fillText("x :"+Math.round(myShip.x)+" "+ " y: "+Math.round(myShip.y), 100, innerHeight-50); 
     //położenie statku
     
     
@@ -529,29 +541,29 @@ function CreateNewAsteroid(sizeOfNewAsteroid){
     if(random==0){
         newAsteroidX = 0; 
         newAsteroidY = Math.floor(Math.random() * innerHeight) + 1; 
-        newAsteroidVelocityY= Math.floor(Math.random() * 1)-0.5;
-        newAsteroidVelocityX= Math.floor(Math.random() * 2)+2;
+        newAsteroidVelocityY= Math.floor(Math.random() * 0.4)-0.5;
+        newAsteroidVelocityX= Math.floor(Math.random() * 0.7)+2;
     }
         
     if(random==1){
        newAsteroidX =  innerWidth-1; 
         newAsteroidY = Math.floor(Math.random() * innerHeight) + 1; 
-        newAsteroidVelocityY= Math.floor(Math.random() * 1)-0.5;
-        newAsteroidVelocityX= (-1)* Math.floor(Math.random() * 2)-2;
+        newAsteroidVelocityY= Math.floor(Math.random() * 0.4)-0.5;
+        newAsteroidVelocityX= (-1)* Math.floor(Math.random() * 0.7)-2;
     }
        
    if(random==2){
        newAsteroidX = Math.floor(Math.random() * innerWidth) + 1; 
         newAsteroidY = 0; 
-        newAsteroidVelocityY= Math.floor(Math.random() * 2)+2;
-        newAsteroidVelocityX= Math.floor(Math.random() * 1)-0.5;
+        newAsteroidVelocityY= Math.floor(Math.random() * 0.7)+2;
+        newAsteroidVelocityX= Math.floor(Math.random() * 0.4)-0.5;
    }
        
   if(random==3){
        newAsteroidX = Math.floor(Math.random() * innerWidth) + 1; 
         newAsteroidY = innerHeight-1;  
-        newAsteroidVelocityY= (-1)*Math.floor(Math.random() * 2)-2;
-        newAsteroidVelocityX= Math.floor(Math.random() * 1)-0.5;
+        newAsteroidVelocityY= (-1)*Math.floor(Math.random() * 0.7)-2;
+        newAsteroidVelocityX= Math.floor(Math.random() * 0.4)-0.5;
   }
         
         
